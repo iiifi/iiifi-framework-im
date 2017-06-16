@@ -13,8 +13,6 @@ import com.netease.nim.demo.main.activity.MultiportActivity;
 import com.netease.nim.demo.main.model.MainTab;
 import com.netease.nim.demo.main.reminder.ReminderManager;
 import com.netease.nim.demo.session.SessionHelper;
-import com.netease.nim.demo.session.extension.GuessAttachment;
-import com.netease.nim.demo.session.extension.RTSAttachment;
 import com.netease.nim.demo.session.extension.SnapChatAttachment;
 import com.netease.nim.demo.session.extension.StickerAttachment;
 import com.netease.nim.uikit.common.activity.UI;
@@ -215,12 +213,7 @@ public class SessionListFragment extends MainTabFragment {
             public String getDigestOfAttachment(MsgAttachment attachment) {
                 // 设置自定义消息的摘要消息，展示在最近联系人列表的消息缩略栏上
                 // 当然，你也可以自定义一些内建消息的缩略语，例如图片，语音，音视频会话等，自定义的缩略语会被优先使用。
-                if (attachment instanceof GuessAttachment) {
-                    GuessAttachment guess = (GuessAttachment) attachment;
-                    return guess.getValue().getDesc();
-                } else if (attachment instanceof RTSAttachment) {
-                    return "[白板]";
-                } else if (attachment instanceof StickerAttachment) {
+                if (attachment instanceof StickerAttachment) {
                     return "[贴图]";
                 } else if (attachment instanceof SnapChatAttachment) {
                     return "[阅后即焚]";

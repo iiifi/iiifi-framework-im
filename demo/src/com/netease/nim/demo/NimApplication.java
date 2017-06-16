@@ -23,7 +23,6 @@ import com.netease.nim.demo.contact.ContactHelper;
 import com.netease.nim.demo.event.DemoOnlineStateContentProvider;
 import com.netease.nim.demo.event.OnlineStateEventManager;
 import com.netease.nim.demo.main.activity.WelcomeActivity;
-import com.netease.nim.demo.rts.activity.RTSActivity;
 import com.netease.nim.demo.session.NimDemoLocationProvider;
 import com.netease.nim.demo.session.SessionHelper;
 import com.netease.nim.uikit.NimUIKit;
@@ -93,9 +92,6 @@ public class NimApplication extends Application {
 
             // 注册网络通话来电
             registerAVChatIncomingCallObserver(true);
-
-            // 注册白板会话
-            registerRTSIncomingObserver(true);
 
             // 注册语言变化监听
             registerLocaleReceiver(true);
@@ -263,14 +259,6 @@ public class NimApplication extends Application {
         }, register);
     }
 
-    private void registerRTSIncomingObserver(boolean register) {
-        RTSManager.getInstance().observeIncomingSession(new Observer<RTSData>() {
-            @Override
-            public void onEvent(RTSData rtsData) {
-                RTSActivity.incomingSession(DemoCache.getContext(), rtsData, RTSActivity.FROM_BROADCAST_RECEIVER);
-            }
-        }, register);
-    }
 
     private void registerLocaleReceiver(boolean register) {
         if (register) {

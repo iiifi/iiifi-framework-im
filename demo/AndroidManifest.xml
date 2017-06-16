@@ -254,9 +254,6 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- 下载文件 -->
-        <activity android:name=".session.activity.FileDownloadActivity"
-            android:configChanges="keyboardHidden"
-            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- map -->
         <activity

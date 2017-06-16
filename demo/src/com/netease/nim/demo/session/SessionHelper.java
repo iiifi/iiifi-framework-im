@@ -12,28 +12,18 @@ import com.netease.nim.demo.DemoCache;
 import com.netease.nim.demo.R;
 import com.netease.nim.demo.contact.activity.UserProfileActivity;
 import com.netease.nim.demo.session.action.AVChatAction;
-import com.netease.nim.demo.session.action.FileAction;
-import com.netease.nim.demo.session.action.GuessAction;
-import com.netease.nim.demo.session.action.RTSAction;
 import com.netease.nim.demo.session.action.SnapChatAction;
-import com.netease.nim.demo.session.action.TipAction;
 import com.netease.nim.demo.session.activity.MessageHistoryActivity;
 import com.netease.nim.demo.session.activity.MessageInfoActivity;
 import com.netease.nim.demo.session.extension.CustomAttachParser;
 import com.netease.nim.demo.session.extension.CustomAttachment;
-import com.netease.nim.demo.session.extension.GuessAttachment;
-import com.netease.nim.demo.session.extension.RTSAttachment;
 import com.netease.nim.demo.session.extension.SnapChatAttachment;
 import com.netease.nim.demo.session.extension.StickerAttachment;
 import com.netease.nim.demo.session.search.SearchMessageActivity;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderAVChat;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderDefCustom;
-import com.netease.nim.demo.session.viewholder.MsgViewHolderFile;
-import com.netease.nim.demo.session.viewholder.MsgViewHolderGuess;
-import com.netease.nim.demo.session.viewholder.MsgViewHolderRTS;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderSnapChat;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderSticker;
-import com.netease.nim.demo.session.viewholder.MsgViewHolderTip;
 import com.netease.nim.uikit.NimUIKit;
 import com.netease.nim.uikit.cache.TeamDataCache;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialogHelper;
@@ -156,11 +146,7 @@ public class SessionHelper {
                 actions.add(new AVChatAction(AVChatType.AUDIO));
                 actions.add(new AVChatAction(AVChatType.VIDEO));
             }
-            actions.add(new RTSAction());
             actions.add(new SnapChatAction());
-            actions.add(new GuessAction());
-            actions.add(new FileAction());
-            actions.add(new TipAction());
             p2pCustomization.actions = actions;
             p2pCustomization.withSticker = true;
 
@@ -229,8 +215,6 @@ public class SessionHelper {
             // 定制加号点开后可以包含的操作， 默认已经有图片，视频等消息了
             ArrayList<BaseAction> actions = new ArrayList<>();
             actions.add(new SnapChatAction());
-            actions.add(new GuessAction());
-            actions.add(new FileAction());
             myP2pCustomization.actions = actions;
             myP2pCustomization.withSticker = true;
             // 定制ActionBar右边的按钮，可以加多个
@@ -251,14 +235,10 @@ public class SessionHelper {
     }
 
     private static void registerViewHolders() {
-        NimUIKit.registerMsgItemViewHolder(FileAttachment.class, MsgViewHolderFile.class);
         NimUIKit.registerMsgItemViewHolder(AVChatAttachment.class, MsgViewHolderAVChat.class);
-        NimUIKit.registerMsgItemViewHolder(GuessAttachment.class, MsgViewHolderGuess.class);
         NimUIKit.registerMsgItemViewHolder(CustomAttachment.class, MsgViewHolderDefCustom.class);
         NimUIKit.registerMsgItemViewHolder(StickerAttachment.class, MsgViewHolderSticker.class);
         NimUIKit.registerMsgItemViewHolder(SnapChatAttachment.class, MsgViewHolderSnapChat.class);
-        NimUIKit.registerMsgItemViewHolder(RTSAttachment.class, MsgViewHolderRTS.class);
-        NimUIKit.registerTipMsgViewHolder(MsgViewHolderTip.class);
     }
 
     private static void setSessionListener() {
@@ -292,8 +272,7 @@ public class SessionHelper {
                     // 接收到的消息，附件没有下载成功，不允许转发
                     return true;
                 } else if (message.getMsgType() == MsgTypeEnum.custom && message.getAttachment() != null
-                        && (message.getAttachment() instanceof SnapChatAttachment
-                        || message.getAttachment() instanceof RTSAttachment)) {
+                        && (message.getAttachment() instanceof SnapChatAttachment)){
                     // 白板消息和阅后即焚消息 不允许转发
                     return true;
                 }
@@ -310,8 +289,7 @@ public class SessionHelper {
             @Override
             public boolean shouldIgnore(IMMessage message) {
                 if (message.getAttachment() != null
-                        && (message.getAttachment() instanceof AVChatAttachment
-                        || message.getAttachment() instanceof RTSAttachment)) {
+                        && (message.getAttachment() instanceof AVChatAttachment)) {
                     // 视频通话消息和白板消息 不允许撤回
                     return true;
                 } else if (DemoCache.getAccount().equals(message.getSessionId())) {
