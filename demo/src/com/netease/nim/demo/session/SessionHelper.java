@@ -152,13 +152,6 @@ public class SessionHelper {
 
             // 定制ActionBar右边的按钮，可以加多个
             ArrayList<SessionCustomization.OptionsButton> buttons = new ArrayList<>();
-            SessionCustomization.OptionsButton cloudMsgButton = new SessionCustomization.OptionsButton() {
-                @Override
-                public void onClick(Context context, View view, String sessionId) {
-                    initPopuptWindow(context, view, sessionId, SessionTypeEnum.P2P);
-                }
-            };
-            cloudMsgButton.iconId = R.drawable.nim_ic_messge_history;
 
             SessionCustomization.OptionsButton infoButton = new SessionCustomization.OptionsButton() {
                 @Override
@@ -169,7 +162,6 @@ public class SessionHelper {
 
             infoButton.iconId = R.drawable.nim_ic_message_actionbar_p2p_add;
 
-            buttons.add(cloudMsgButton);
             buttons.add(infoButton);
             p2pCustomization.buttons = buttons;
         }
@@ -321,7 +313,6 @@ public class SessionHelper {
             popupMenu = new NIMPopupMenu(context, menuItemList, listener);
         }
         menuItemList.clear();
-        menuItemList.addAll(getMoreMenuItems(context, sessionId, sessionTypeEnum));
         popupMenu.notifyData();
         popupMenu.show(view);
     }
@@ -354,14 +345,4 @@ public class SessionHelper {
         }
     };
 
-    private static List<PopupMenuItem> getMoreMenuItems(Context context, String sessionId, SessionTypeEnum sessionTypeEnum) {
-        List<PopupMenuItem> moreMenuItems = new ArrayList<PopupMenuItem>();
-        moreMenuItems.add(new PopupMenuItem(context, ACTION_HISTORY_QUERY, sessionId,
-                sessionTypeEnum, DemoCache.getContext().getString(R.string.message_history_query)));
-        moreMenuItems.add(new PopupMenuItem(context, ACTION_SEARCH_MESSAGE, sessionId,
-                sessionTypeEnum, DemoCache.getContext().getString(R.string.message_search_title)));
-        moreMenuItems.add(new PopupMenuItem(context, ACTION_CLEAR_MESSAGE, sessionId,
-                sessionTypeEnum, DemoCache.getContext().getString(R.string.message_clear)));
-        return moreMenuItems;
-    }
 }
