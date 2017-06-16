@@ -165,13 +165,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
 
-        <activity
-            android:name=".contact.activity.BlackListActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
-
         <!-- 文件管理器 -->
         <activity
             android:name=".file.browser.FileBrowserActivity"
