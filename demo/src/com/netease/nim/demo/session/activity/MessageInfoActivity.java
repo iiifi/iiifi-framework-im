@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.netease.nim.demo.DemoCache;
 import com.netease.nim.demo.R;
 import com.netease.nim.demo.contact.activity.UserProfileActivity;
-import com.netease.nim.demo.team.TeamCreateHelper;
 import com.netease.nim.uikit.NimUIKit;
 import com.netease.nim.uikit.cache.NimUserInfoCache;
 import com.netease.nim.uikit.common.activity.UI;
@@ -77,16 +76,6 @@ public class MessageInfoActivity extends UI {
             }
         });
 
-        ((TextView)findViewById(R.id.create_team_layout).findViewById(R.id.textViewName)).setText(R.string.create_normal_team);
-        HeadImageView addImage = (HeadImageView) findViewById(R.id.create_team_layout).findViewById(R.id.imageViewHeader);
-        addImage.setBackgroundResource(com.netease.nim.uikit.R.drawable.nim_team_member_add_selector);
-        addImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createTeamMsg();
-            }
-        });
-
         ((TextView)findViewById(R.id.toggle_layout).findViewById(R.id.user_profile_title)).setText(R.string.msg_notice);
         switchButton = (SwitchButton) findViewById(R.id.toggle_layout).findViewById(R.id.user_profile_toggle);
         switchButton.setOnChangedListener(onChangedListener);
@@ -138,43 +127,4 @@ public class MessageInfoActivity extends UI {
         UserProfileActivity.start(this, account);
     }
 
-    /**
-     * 创建群聊
-     */
-    private void createTeamMsg() {
-        ArrayList<String> memberAccounts = new ArrayList<>();
-        memberAccounts.add(account);
-        ContactSelectActivity.Option option = TeamHelper.getCreateContactSelectOption(memberAccounts, 50);
-        NimUIKit.startContactSelect(this, option, REQUEST_CODE_NORMAL);// 创建群
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE_NORMAL) {
-                final ArrayList<String> selected = data.getStringArrayListExtra(ContactSelectActivity.RESULT_DATA);
-                if (selected != null && !selected.isEmpty()) {
-                    TeamCreateHelper.createNormalTeam(MessageInfoActivity.this, selected, true, new RequestCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void param) {
-                            finish();
-                        }
-
-                        @Override
-                        public void onFailed(int code) {
-
-                        }
-
-                        @Override
-                        public void onException(Throwable exception) {
-
-                        }
-                    });
-                } else {
-                    Toast.makeText(DemoCache.getContext(), "请选择至少一个联系人！", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
 }

@@ -26,7 +26,6 @@ import com.netease.nim.demo.main.activity.WelcomeActivity;
 import com.netease.nim.demo.rts.activity.RTSActivity;
 import com.netease.nim.demo.session.NimDemoLocationProvider;
 import com.netease.nim.demo.session.SessionHelper;
-import com.netease.nim.demo.team.TeamAVChatHelper;
 import com.netease.nim.uikit.NimUIKit;
 import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nim.uikit.contact.core.query.PinYin;
@@ -252,7 +251,6 @@ public class NimApplication extends Application {
                 Log.e("Extra", "Extra Message->" + extra);
                 if (PhoneCallStateObserver.getInstance().getPhoneCallState() != PhoneCallStateObserver.PhoneCallStateEnum.IDLE
                         || AVChatProfile.getInstance().isAVChatting()
-                        || TeamAVChatHelper.sharedInstance().isTeamAVChatting()
                         || AVChatManager.getInstance().getCurrentChatId() != 0) {
                     LogUtil.i(TAG, "reject incoming call data =" + data.toString() + " as local phone is not idle");
                     AVChatManager.getInstance().sendControlCommand(data.getChatId(), AVChatControlCommand.BUSY, null);

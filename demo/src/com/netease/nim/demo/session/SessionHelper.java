@@ -16,7 +16,6 @@ import com.netease.nim.demo.session.action.FileAction;
 import com.netease.nim.demo.session.action.GuessAction;
 import com.netease.nim.demo.session.action.RTSAction;
 import com.netease.nim.demo.session.action.SnapChatAction;
-import com.netease.nim.demo.session.action.TeamAVChatAction;
 import com.netease.nim.demo.session.action.TipAction;
 import com.netease.nim.demo.session.activity.MessageHistoryActivity;
 import com.netease.nim.demo.session.activity.MessageInfoActivity;
@@ -35,7 +34,6 @@ import com.netease.nim.demo.session.viewholder.MsgViewHolderRTS;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderSnapChat;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderSticker;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderTip;
-import com.netease.nim.demo.team.TeamAVChatHelper;
 import com.netease.nim.uikit.NimUIKit;
 import com.netease.nim.uikit.cache.TeamDataCache;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialogHelper;
@@ -106,7 +104,6 @@ public class SessionHelper {
 
         NimUIKit.setCommonP2PSessionCustomization(getP2pCustomization());
 
-        NimUIKit.setCommonTeamSessionCustomization(getTeamCustomization());
     }
 
     public static void startP2PSession(Context context, String account) {
@@ -129,10 +126,6 @@ public class SessionHelper {
         NimUIKit.startTeamSession(context, tid, anchor);
     }
 
-    // 打开群聊界面(用于 UIKIT 中部分界面跳转回到指定的页面)
-    public static void startTeamSession(Context context, String tid, Class<? extends Activity> backToClass, IMMessage anchor) {
-        NimUIKit.startChatting(context, tid, SessionTypeEnum.Team, getTeamCustomization(), backToClass, anchor);
-    }
 
     // 定制化单聊界面。如果使用默认界面，返回null即可
     private static SessionCustomization getP2pCustomization() {
@@ -255,81 +248,6 @@ public class SessionHelper {
             myP2pCustomization.buttons = buttons;
         }
         return myP2pCustomization;
-    }
-
-    private static SessionCustomization getTeamCustomization() {
-        if (teamCustomization == null) {
-
-            // 定制加号点开后可以包含的操作， 默认已经有图片，视频等消息了
-            final TeamAVChatAction avChatAction = new TeamAVChatAction(AVChatType.VIDEO);
-            TeamAVChatHelper.sharedInstance().registerObserver(true);
-
-            ArrayList<BaseAction> actions = new ArrayList<>();
-            actions.add(avChatAction);
-            actions.add(new GuessAction());
-            actions.add(new FileAction());
-            actions.add(new TipAction());
-
-            teamCustomization = new SessionCustomization() {
-                @Override
-                public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-                    if (requestCode == TeamRequestCode.REQUEST_CODE) {
-                        if (resultCode == Activity.RESULT_OK) {
-                            String reason = data.getStringExtra(TeamExtras.RESULT_EXTRA_REASON);
-                            boolean finish = reason != null && (reason.equals(TeamExtras
-                                    .RESULT_EXTRA_REASON_DISMISS) || reason.equals(TeamExtras.RESULT_EXTRA_REASON_QUIT));
-                            if (finish) {
-                                activity.finish(); // 退出or解散群直接退出多人会话
-                            }
-                        }
-                    } else if (requestCode == TeamRequestCode.REQUEST_TEAM_VIDEO) {
-                        if (resultCode == Activity.RESULT_OK) {
-                            ArrayList<String> selectedAccounts = data.getStringArrayListExtra(ContactSelectActivity.RESULT_DATA);
-                            avChatAction.onSelectedAccountsResult(selectedAccounts);
-                        } else {
-                            avChatAction.onSelectedAccountFail();
-                        }
-                    }
-                }
-
-                @Override
-                public MsgAttachment createStickerAttachment(String category, String item) {
-                    return new StickerAttachment(category, item);
-                }
-            };
-
-            teamCustomization.actions = actions;
-
-            // 定制ActionBar右边的按钮，可以加多个
-            ArrayList<SessionCustomization.OptionsButton> buttons = new ArrayList<>();
-            SessionCustomization.OptionsButton cloudMsgButton = new SessionCustomization.OptionsButton() {
-                @Override
-                public void onClick(Context context, View view, String sessionId) {
-                    initPopuptWindow(context, view, sessionId, SessionTypeEnum.Team);
-                }
-            };
-            cloudMsgButton.iconId = R.drawable.nim_ic_messge_history;
-
-            SessionCustomization.OptionsButton infoButton = new SessionCustomization.OptionsButton() {
-                @Override
-                public void onClick(Context context, View view, String sessionId) {
-                    Team team = TeamDataCache.getInstance().getTeamById(sessionId);
-                    if (team != null && team.isMyTeam()) {
-                        NimUIKit.startTeamInfo(context, sessionId);
-                    } else {
-                        Toast.makeText(context, R.string.team_invalid_tip, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            };
-            infoButton.iconId = R.drawable.nim_ic_message_actionbar_team;
-            buttons.add(cloudMsgButton);
-            buttons.add(infoButton);
-            teamCustomization.buttons = buttons;
-
-            teamCustomization.withSticker = true;
-        }
-
-        return teamCustomization;
     }
 
     private static void registerViewHolders() {
