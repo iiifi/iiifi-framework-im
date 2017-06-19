@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.netease.nim.demo.DemoCache;
 import com.netease.nim.demo.R;
 import com.netease.nim.demo.main.activity.SystemMessageActivity;
-import com.netease.nim.demo.main.activity.TeamListActivity;
 import com.netease.nim.demo.main.model.MainTab;
 import com.netease.nim.demo.session.SessionHelper;
 import com.netease.nim.uikit.common.activity.UI;
@@ -51,10 +50,6 @@ public class ContactListFragment extends MainTabFragment {
         static void handle(Context context, AbsContactItem item) {
             if (item == VERIFY) {
                 SystemMessageActivity.start(context);
-            } else if (item == NORMAL_TEAM) {
-                TeamListActivity.start(context, ItemTypes.TEAMS.NORMAL_TEAM);
-            } else if (item == ADVANCED_TEAM) {
-                TeamListActivity.start(context, ItemTypes.TEAMS.ADVANCED_TEAM);
             } else if (item == MY_COMPUTER) {
                 SessionHelper.startP2PSession(context, DemoCache.getAccount());
             }
