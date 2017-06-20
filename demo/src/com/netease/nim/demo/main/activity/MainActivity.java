@@ -11,10 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.netease.nim.demo.R;
-import com.netease.nim.demo.avchat.AVChatProfile;
-import com.netease.nim.demo.avchat.activity.AVChatActivity;
 import com.netease.nim.demo.config.preference.UserPreferences;
 import com.netease.nim.demo.contact.activity.AddFriendActivity;
 import com.netease.nim.demo.login.LoginActivity;
@@ -242,12 +239,6 @@ public class MainActivity extends UI {
         } else if (intent.hasExtra(EXTRA_APP_QUIT)) {
             onLogout();
             return;
-        } else if (intent.hasExtra(AVChatActivity.INTENT_ACTION_AVCHAT)) {
-            if (AVChatProfile.getInstance().isAVChatting()) {
-                Intent localIntent = new Intent();
-                localIntent.setClass(this, AVChatActivity.class);
-                startActivity(localIntent);
-            }
         } else if (intent.hasExtra(com.netease.nim.demo.main.model.Extras.EXTRA_JUMP_P2P)) {
             Intent data = intent.getParcelableExtra(com.netease.nim.demo.main.model.Extras.EXTRA_DATA);
             String account = data.getStringExtra(com.netease.nim.demo.main.model.Extras.EXTRA_ACCOUNT);

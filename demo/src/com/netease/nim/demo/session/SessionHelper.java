@@ -67,7 +67,6 @@ public class SessionHelper {
     private static final int ACTION_CLEAR_MESSAGE = 2;
 
     private static SessionCustomization p2pCustomization;
-    private static SessionCustomization teamCustomization;
     private static SessionCustomization myP2pCustomization;
 
     private static NIMPopupMenu popupMenu;

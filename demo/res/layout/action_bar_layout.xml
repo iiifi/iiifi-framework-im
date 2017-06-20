@@ -21,14 +21,6 @@
             android:contentDescription="@string/empty"
             android:layout_marginRight="5dp"
             android:src="@drawable/actionbar_dark_back_icon" />
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/empty"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/actionbar_dark_logo_icon" />
     </LinearLayout>
 
     <TextView
