@@ -10,10 +10,6 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.netease.nim.demo.avchat.AVChatProfile;
-import com.netease.nim.demo.avchat.activity.AVChatActivity;
-import com.netease.nim.demo.avchat.receiver.PhoneCallStateObserver;
 import com.netease.nim.demo.common.util.crash.AppCrashHandler;
 import com.netease.nim.demo.common.util.sys.SystemUtil;
 import com.netease.nim.demo.config.ExtraOptions;
@@ -45,8 +41,6 @@ import com.netease.nimlib.sdk.mixpush.NIMPushClient;
 import com.netease.nimlib.sdk.msg.MessageNotifierCustomization;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.rts.RTSManager;
-import com.netease.nimlib.sdk.rts.model.RTSData;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.model.IMMessageFilter;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
@@ -76,7 +70,6 @@ public class NimApplication extends Application {
         AppCrashHandler.getInstance(this);
 
         if (inMainProcess()) {
-
             // init pinyin
             PinYin.init(this);
             PinYin.validate();
@@ -89,9 +82,6 @@ public class NimApplication extends Application {
 
             // 初始化消息提醒
             NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-
-            // 注册网络通话来电
-            registerAVChatIncomingCallObserver(true);
 
             // 注册语言变化监听
             registerLocaleReceiver(true);
@@ -238,27 +228,6 @@ public class NimApplication extends Application {
             }
         });
     }
-
-    private void registerAVChatIncomingCallObserver(boolean register) {
-        AVChatManager.getInstance().observeIncomingCall(new Observer<AVChatData>() {
-            @Override
-            public void onEvent(AVChatData data) {
-                String extra = data.getExtra();
-                Log.e("Extra", "Extra Message->" + extra);
-                if (PhoneCallStateObserver.getInstance().getPhoneCallState() != PhoneCallStateObserver.PhoneCallStateEnum.IDLE
-                        || AVChatProfile.getInstance().isAVChatting()
-                        || AVChatManager.getInstance().getCurrentChatId() != 0) {
-                    LogUtil.i(TAG, "reject incoming call data =" + data.toString() + " as local phone is not idle");
-                    AVChatManager.getInstance().sendControlCommand(data.getChatId(), AVChatControlCommand.BUSY, null);
-                    return;
-                }
-                // 有网络来电打开AVChatActivity
-                AVChatProfile.getInstance().setAVChatting(true);
-                AVChatProfile.getInstance().launchActivity(data, AVChatActivity.FROM_BROADCASTRECEIVER);
-            }
-        }, register);
-    }
-
 
     private void registerLocaleReceiver(boolean register) {
         if (register) {
