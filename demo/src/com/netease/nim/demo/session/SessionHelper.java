@@ -18,7 +18,6 @@ import com.netease.nim.demo.session.extension.CustomAttachment;
 import com.netease.nim.demo.session.extension.SnapChatAttachment;
 import com.netease.nim.demo.session.extension.StickerAttachment;
 import com.netease.nim.demo.session.search.SearchMessageActivity;
-import com.netease.nim.demo.session.viewholder.MsgViewHolderAVChat;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderDefCustom;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderSnapChat;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderSticker;
@@ -37,7 +36,6 @@ import com.netease.nim.uikit.team.model.TeamExtras;
 import com.netease.nim.uikit.team.model.TeamRequestCode;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.avchat.constant.AVChatType;
 import com.netease.nimlib.sdk.avchat.model.AVChatAttachment;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
@@ -220,7 +218,6 @@ public class SessionHelper {
     }
 
     private static void registerViewHolders() {
-        NimUIKit.registerMsgItemViewHolder(AVChatAttachment.class, MsgViewHolderAVChat.class);
         NimUIKit.registerMsgItemViewHolder(CustomAttachment.class, MsgViewHolderDefCustom.class);
         NimUIKit.registerMsgItemViewHolder(StickerAttachment.class, MsgViewHolderSticker.class);
         NimUIKit.registerMsgItemViewHolder(SnapChatAttachment.class, MsgViewHolderSnapChat.class);
